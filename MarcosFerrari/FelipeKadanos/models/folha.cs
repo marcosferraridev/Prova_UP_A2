@@ -1,8 +1,9 @@
-namespace FelipeKadanos.models;
+﻿namespace FelipeKadanos.models;
+
 public class Folha {
-    public int Id { get; set; }
+    public int Id { get; set; } // Chave inteira gerada automaticamente pelo SQLite.
     public string Nome { get; set; } = "";
-    public string Cpf { get; set; }
+    public string Cpf { get; set; } = "";
     public int Mes { get; set; }
     public int Ano { get; set; }
     public int HorasTrabalhadas { get; set; }

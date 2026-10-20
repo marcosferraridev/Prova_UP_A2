@@ -1,0 +1,44 @@
+# REST Client: execute em ordem com banco vazio. Formulas de impostos preservadas.
+# Automatizar em banco temporario: powershell -File tests/executar.ps1
+@baseUrl = http://localhost:5000
+
+### Lista vazia
+# Status: 404
+GET {{baseUrl}}/api/folha/listar
+
+### Total vazio
+# Status: 404
+GET {{baseUrl}}/api/folha/total-liquido
+
+### Busca inexistente
+# Status: 404
+GET {{baseUrl}}/api/folha/buscar/52998224725/1/2026
+
+### Remocao inexistente
+# Status: 404
+DELETE {{baseUrl}}/api/folha/remover/52998224725/1/2026
+
+### CPF invalido: 
+# Status: 400
+POST {{baseUrl}}/api/folha/cadastrar
+Content-Type: application/json
+
+{"valorHora":10,"ano":2026,"horasTrabalhadas":100,"mes":1,"cpf":"","nome":"Marcos"}
+
+### CPF invalido: 123
+# Status: 400
+POST {{baseUrl}}/api/folha/cadastrar
+Content-Type: application/json
+
+{"valorHora":10,"ano":2026,"horasTrabalhadas":100,"mes":1,"cpf":"123","nome":"Marcos"}
+
+### Cadastro calcula valores e gera Id, ignorando valores enviados
+# Status: 201
+POST {{baseUrl}}/api/folha/cadastrar
+Content-Type: application/json
+
+{"id":999,"mes":1,"inss":999,"salarioLiquido":999,"horasTrabalhadas":100,"cpf":"52998224725","impostoRenda":999,"salarioBruto":999,"nome":"Marcos","valorHora":10,"ano":2026,"fgts":999}
+
+### Remocao com ano invalido
+# Status: 400
+DELETE {{baseUrl}}/api/folha/remover/52998224725/1/1999
